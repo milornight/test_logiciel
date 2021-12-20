@@ -28,6 +28,12 @@ class TestFuncs(unittest.TestCase):
         self.assertEqual(funcs.ecart_int([-1,-5,-4,-8]),6.25)
         self.assertEqual(funcs.ecart_int([8,-3,11,0]),32.5)
 
+    def test_si_geo_int(self):
+        self.assertEqual(funcs.si_geo_int([2,8,32,128]),True)
+        self.assertEqual(funcs.si_geo_int([-7,-2,-8,-3]),False)
+        self.assertEqual(funcs.si_geo_int([-1,-2,-4,-8]),True)
+        self.assertEqual(funcs.si_geo_int([8,3,11,0]),False)
+
 if __name__ == '__main__':
         unittest.main()
 
