@@ -23,3 +23,10 @@ def med_int(l=[]):
     else:
         return ( l[m] + l[m-1] ) / 2.0
 
+def ecart_int(l=[]):
+    m = moy_int(l)
+    n = len(l)
+    e = 0.0
+    for i in range(n):
+        e += ((l[i]-m)**2)
+    return e/n

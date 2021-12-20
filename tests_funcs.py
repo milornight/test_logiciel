@@ -22,6 +22,12 @@ class TestFuncs(unittest.TestCase):
         self.assertEqual(funcs.med_int([8,-3,11]),8)
         self.assertEqual(funcs.med_int([1,5,3,9,10,7]),6)
 
+    def test_ecart_int(self):
+        self.assertEqual(funcs.ecart_int([1,2,3,4]),1.25)
+        self.assertEqual(funcs.ecart_int([0,0,0,0]),0)
+        self.assertEqual(funcs.ecart_int([-1,-5,-4,-8]),6.25)
+        self.assertEqual(funcs.ecart_int([8,-3,11,0]),32.5)
+
 if __name__ == '__main__':
         unittest.main()
 
