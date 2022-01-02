@@ -1,6 +1,5 @@
 -- sqlite3 bibli.db
 -- .read bibli.sql
-
 -- commandes de destruction des tables
 DROP TABLE IF EXISTS Utilisateur;
 
