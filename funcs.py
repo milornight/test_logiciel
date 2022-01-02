@@ -58,3 +58,15 @@ def geo_int(n,l=[]):
         return b, s
     else:
         return b, None
+
+def arith_int(n,l=[]):
+    long = len(l)
+    b = si_arith_int(l)
+    if b == True :
+        r = l[1]-l[0]
+        s = [l[long-1]+r]
+        for i in range (n-1):
+            s.append(s[i]+r)
+        return b, s
+    else:
+        return b, None

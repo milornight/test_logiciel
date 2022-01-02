@@ -46,6 +46,12 @@ class TestFuncs(unittest.TestCase):
         self.assertEqual(funcs.geo_int(4,[-1,-2,-4,-8]),(True,[-16,-32,-64,-128]))
         self.assertEqual(funcs.geo_int(6,[8,3,11,0]),(False,None))
 
+    def test_arith_int(self):
+        self.assertEqual(funcs.arith_int(4,[2,4,6,8]),(True,[10,12,14,16]))
+        self.assertEqual(funcs.arith_int(6,[-7,-2,-8,-3]),(False,None))
+        self.assertEqual(funcs.arith_int(3,[-1,0,1,2]),(True,[3,4,5]))
+        self.assertEqual(funcs.arith_int(1,[8,3,11,0]),(False,None))
+
 
 if __name__ == '__main__':
         unittest.main()
