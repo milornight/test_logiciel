@@ -39,6 +39,7 @@ class TestFuncs(unittest.TestCase):
         self.assertEqual(funcs.si_arith_int([-7,-2,-8,-3]),False)
         self.assertEqual(funcs.si_arith_int([-1,0,1,2]),True)
         self.assertEqual(funcs.si_arith_int([8,3,11,0]),False)
+        
 
 if __name__ == '__main__':
         unittest.main()
