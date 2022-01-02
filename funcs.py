@@ -46,3 +46,15 @@ def si_arith_int(l=[]):
         if (l[i+1]-l[i] != r):
             return False
     return True
+
+def geo_int(n,l=[]):
+    long = len(l)
+    b = si_geo_int(l)
+    if b == True :
+        p = l[1]/l[0]
+        s = [l[long-1]*p]
+        for i in range (n-1):
+            s.append(s[i]*p)
+        return b, s
+    else:
+        return b, None
