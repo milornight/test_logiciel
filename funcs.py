@@ -30,3 +30,11 @@ def ecart_int(l=[]):
     for i in range(n):
         e += ((l[i]-m)**2)
     return e/n
+
+def si_geo_int(l=[]):
+    n = len(l)
+    p = l[1]/l[0]
+    for i in range (n-1):
+        if (l[i+1]/l[i] != p):
+            return False
+    return True
