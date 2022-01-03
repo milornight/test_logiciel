@@ -84,25 +84,84 @@ def checkdata():
                 if re.search(r'[!@#$%^&*()+="]',raw[0]) :
                     logging.error("Username has special caracter")
                 else :
-                    for column in c.execute('SELECT password FROM Utilisateur'):
-                        if len(column[0]) < 8 :
+                    for raw2 in c.execute('SELECT password FROM Utilisateur'):
+                        if len(raw2[0]) < 8 :
                             logging.error("Password is less than 8")
                         else :
-                            if re.search(r'[!@#$%^&*()+="]+',column[0]) and re.search(r'[|-_.,;:~]+', column[0]) and \
-                               re.search(r'[A-Z]+', column[0]) and re.search(r'[a-z]+', column[0]) and \
-                               re.search(r'[0-9]+', column[0]) :
+                            if re.search(r'[!@#$%^&*()+="]+',raw2[0]) and re.search(r'[|-_.,;:~]+', raw2[0]) and \
+                               re.search(r'[A-Z]+', raw2[0]) and re.search(r'[a-z]+', raw2[0]) and \
+                               re.search(r'[0-9]+', raw2[0]) :
                                 logging.info("True")
                             else :
                                 logging.error("Password does not respect conditions")                            
     except Exception as e:
         logging.info("affichageData:{}".format(e))
 
+# Renvoyer les clefs
+def send_spublickey(username):
+    try:
+        conn = sqlite3.connect('bibli.db')
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+        # selection username et password
+        s = []
+        for raw in c.execute("SELECT spublickey FROM Utilisateur where username='{}'".format(username)):
+           s.append(raw[0])
+           print(s)
+        return s
+    except Exception as e:
+        logging.info("send spublickey:{}".format(e))
+
+def send_sprivatekey(username):
+    try:
+        conn = sqlite3.connect('bibli.db')
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+        # selection username et password
+        s = []
+        for raw in c.execute("SELECT sprivatekey FROM Utilisateur where username='{}'".format(username)):
+           s.append(raw[0])
+           print(s)
+        return s
+    except Exception as e:
+        logging.info("send sprivatekey:{}".format(e))
+
+def send_epublickey(username):
+    try:
+        conn = sqlite3.connect('bibli.db')
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+        # selection username et password
+        s = []
+        for raw in c.execute("SELECT epublickey FROM Utilisateur where username='{}'".format(username)):
+           s.append(raw[0])
+           print(s)
+        return s
+    except Exception as e:
+        logging.info("send epublickey:{}".format(e))
+
+def send_eprivatekey(username):
+    try:
+        conn = sqlite3.connect('bibli.db')
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+        # selection username et password
+        s = []
+        for raw in c.execute("SELECT eprivatekey FROM Utilisateur where username='{}'".format(username)):
+           s.append(raw[0])
+           print(s)
+        return s
+    except Exception as e:
+        logging.info("send eprivatekey:{}".format(e))
+
 if __name__ == '__main__':
     # delete_table()
     deleteData()
     insertData('Amelie00', 'Amelie_000#')
     insertData('Lynne2', 'Lynne-111@')
-    affichageData()
+    #affichageData()
     checkdata()
+    s_public_key = send_spublickey('Lynne2')
+    print(s_public_key)
     #updateData("facial_camera_info_64", '5', 178)
     #selectData("facial_camera_info_64")
