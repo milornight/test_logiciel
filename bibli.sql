@@ -14,5 +14,5 @@ CREATE TABLE Utilisateur (
     eprivatekey TEXT NOT NULL -- check (len(eprivatekey) = 128)
     --CHECK (username NOT LIKE '%[^A-Z0-9_/#-]%' ), --'%[^A-Z0-9#^!@]%'
     --CHECK (password LIKE '%[A-Z]%' AND password LIKE '%[a-z]%' AND password LIKE '%[0-9]%'
-    --    AND password LIKE '%[!#$^&-_=.,;:~]%' AND password LIKE '%[@%*()+|"]%')
+    --    AND password LIKE '%[|-_.,;:~]%' AND password LIKE '%[!@#$%^&*()+="]%')
     );
