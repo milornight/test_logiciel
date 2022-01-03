@@ -45,6 +45,7 @@ def affichageData():
             print ("\nsprivateKey = ", raw[3])
             print ("\nepublicKey = ", raw[4])
             print ("\neprivateKey = ", raw[5])
+        conn.close()
     except Exception as e:
         logging.info("affichageData:{}".format(e))
 
@@ -80,20 +81,30 @@ def checkdata():
         for raw in c.execute('SELECT username FROM Utilisateur'):
             if len(raw[0]) < 3 :
                 logging.error("Username's length is less than 3")
+                conn.close()
+                return False
             else :
                 if re.search(r'[!@#$%^&*()+="]',raw[0]) :
                     logging.error("Username has special caracter")
+                    conn.close()
+                    return False
                 else :
                     for raw2 in c.execute('SELECT password FROM Utilisateur'):
                         if len(raw2[0]) < 8 :
                             logging.error("Password is less than 8")
+                            conn.close()
+                            return False
                         else :
                             if re.search(r'[!@#$%^&*()+="]+',raw2[0]) and re.search(r'[|-_.,;:~]+', raw2[0]) and \
                                re.search(r'[A-Z]+', raw2[0]) and re.search(r'[a-z]+', raw2[0]) and \
                                re.search(r'[0-9]+', raw2[0]) :
                                 logging.info("True")
+                                conn.close()
+                                return True
                             else :
-                                logging.error("Password does not respect conditions")                            
+                                logging.error("Password does not respect conditions")
+                                conn.close()
+                                return False                            
     except Exception as e:
         logging.info("affichageData:{}".format(e))
 
@@ -108,6 +119,7 @@ def send_spublickey(username):
         for raw in c.execute("SELECT spublickey FROM Utilisateur where username='{}'".format(username)):
            s.append(raw[0])
            print(s)
+        conn.close()
         return s
     except Exception as e:
         logging.info("send spublickey:{}".format(e))
@@ -122,6 +134,7 @@ def send_sprivatekey(username):
         for raw in c.execute("SELECT sprivatekey FROM Utilisateur where username='{}'".format(username)):
            s.append(raw[0])
            print(s)
+        conn.close()
         return s
     except Exception as e:
         logging.info("send sprivatekey:{}".format(e))
@@ -136,6 +149,7 @@ def send_epublickey(username):
         for raw in c.execute("SELECT epublickey FROM Utilisateur where username='{}'".format(username)):
            s.append(raw[0])
            print(s)
+        conn.close()
         return s
     except Exception as e:
         logging.info("send epublickey:{}".format(e))
@@ -150,9 +164,29 @@ def send_eprivatekey(username):
         for raw in c.execute("SELECT eprivatekey FROM Utilisateur where username='{}'".format(username)):
            s.append(raw[0])
            print(s)
+        conn.close()
         return s
     except Exception as e:
         logging.info("send eprivatekey:{}".format(e))
+
+def check_all_data():
+    conn = sqlite3.connect('bibli.db')
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+    if checkdata() == True :
+        for user in c.execute('SELECT username FROM Utilisateur') :
+            spubkey = send_spublickey(user)
+            if len(spubkey)!= 128 :
+                logging.error("User:{}, it's s-public key is not 128".format(user))
+            sprikey = send_sprivatekey(user)
+            if len(sprikey)!= 128 :
+                logging.error("User:{}, it's s-private key is not 128".format(user))
+            epubkey = send_epublickey(user)
+            if len(epubkey)!= 128 :
+                logging.error("User:{}, it's e-public key is not 128".format(user))
+            eprikey = send_sprivatekey(user)
+            if len(eprikey)!= 128 :
+                logging.error("User:{}, it's e-private key is not 128".format(user))
 
 if __name__ == '__main__':
     # delete_table()
@@ -160,8 +194,7 @@ if __name__ == '__main__':
     insertData('Amelie00', 'Amelie_000#')
     insertData('Lynne2', 'Lynne-111@')
     #affichageData()
-    checkdata()
-    s_public_key = send_spublickey('Lynne2')
-    print(s_public_key)
-    #updateData("facial_camera_info_64", '5', 178)
-    #selectData("facial_camera_info_64")
+    #checkdata()
+    #s_public_key = send_spublickey('Lynne2')
+    #print(s_public_key)
+    check_all_data()
