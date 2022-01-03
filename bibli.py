@@ -77,6 +77,11 @@ def checkdata():
         conn = sqlite3.connect('bibli.db')
         conn.row_factory = sqlite3.Row
         c = conn.cursor()
+        # initialiser db
+        deleteData()
+        # insert les data
+        insertData('Amelie00', 'Amelie_000#')
+        insertData('Lynne2', 'Lynne-111@')
         # selection username et password
         for raw in c.execute('SELECT username FROM Utilisateur'):
             if len(raw[0]) < 3 :
@@ -90,19 +95,22 @@ def checkdata():
                     return False
                 else :
                     for raw2 in c.execute('SELECT password FROM Utilisateur'):
+                        print(raw2[0])
                         if len(raw2[0]) < 8 :
                             logging.error("Password is less than 8")
                             conn.close()
                             return False
                         else :
-                            if re.search(r'[!@#$%^&*()+="]+',raw2[0]) and re.search(r'[|-_.,;:~]+', raw2[0]) and \
-                               re.search(r'[A-Z]+', raw2[0]) and re.search(r'[a-z]+', raw2[0]) and \
-                               re.search(r'[0-9]+', raw2[0]) :
+                            #print("yessssss befor verification")
+                            if re.search('[!@#$%^&*()+=]',raw2[0]) and re.search('[|_~-]',raw2[0]) and re.search('[A-Z]', raw2[0]) and re.search('[a-z]', raw2[0]) and \
+                               re.search('[0-9]', raw2[0]) :
+                                #print("yessssss")
                                 logging.info("True")
                                 conn.close()
                                 return True
                             else :
                                 logging.error("Password does not respect conditions")
+                                #print("Nooooooo")
                                 conn.close()
                                 return False                            
     except Exception as e:
@@ -175,26 +183,29 @@ def check_all_data():
     c = conn.cursor()
     if checkdata() == True :
         for user in c.execute('SELECT username FROM Utilisateur') :
-            spubkey = send_spublickey(user)
-            if len(spubkey)!= 128 :
-                logging.error("User:{}, it's s-public key is not 128".format(user))
-            sprikey = send_sprivatekey(user)
-            if len(sprikey)!= 128 :
-                logging.error("User:{}, it's s-private key is not 128".format(user))
-            epubkey = send_epublickey(user)
-            if len(epubkey)!= 128 :
-                logging.error("User:{}, it's e-public key is not 128".format(user))
-            eprikey = send_sprivatekey(user)
-            if len(eprikey)!= 128 :
-                logging.error("User:{}, it's e-private key is not 128".format(user))
+            spubkey = send_spublickey(user[0])
+            if len(spubkey[0]) != 128 :
+                logging.error("User:{}, it's s-public key is not 128".format(user[0]))
+            sprikey = send_sprivatekey(user[0])
+            if len(sprikey[0]) != 128 :
+                logging.error("User:{}, it's s-private key is not 128".format(user[0]))
+            epubkey = send_epublickey(user[0])
+            if len(epubkey[0]) != 128 :
+                logging.error("User:{}, it's e-public key is not 128".format(user[0]))
+            eprikey = send_eprivatekey(user[0])
+            if len(eprikey[0]) != 128 :
+                logging.error("User:{}, it's e-private key is not 128".format(user[0]))
+            
+            logging.info("True")
 
 if __name__ == '__main__':
     # delete_table()
-    deleteData()
-    insertData('Amelie00', 'Amelie_000#')
-    insertData('Lynne2', 'Lynne-111@')
+    #deleteData()
+    #insertData('Amelie00', 'Amelie_000#')
+    #insertData('Lynne2', 'Lynne-111@')
     #affichageData()
-    #checkdata()
+    res = checkdata()
+    print(res)
     #s_public_key = send_spublickey('Lynne2')
     #print(s_public_key)
-    check_all_data()
+    #check_all_data()
