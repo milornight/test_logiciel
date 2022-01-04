@@ -1,6 +1,30 @@
 import sqlite3, random, itertools, string
 import logging, re
 
+res = False
+
+# Creer la base de donnees
+def create_db():
+    global res
+    if res is True :
+        delete_table()
+    conn = sqlite3.connect('bibli.db')
+    c = conn.cursor()
+    sql = """CREATE TABLE {}
+          (username TEXT PRIMARY KEY,
+          password TEXT NOT NULL,
+          spublickey TEXT KEY NOT NULL,
+          sprivatekey TEXT NOT NULL,
+          epublickey TEXT KEY NOT NULL,
+          eprivatekey TEXT NOT NULL
+          )
+          """.format('Utilisateur')
+    c.execute(sql)
+    conn.commit()
+    conn.close()
+    res = True
+    return res
+
 # ajouter un utilisateur avec tous les champs
 def insertData(user, mdp):
     try:
@@ -51,6 +75,7 @@ def affichageData():
 
 # initialisation db
 def deleteData():
+    global res
     try:
         conn = sqlite3.connect('bibli.db')
         c = conn.cursor()
@@ -59,6 +84,8 @@ def deleteData():
         conn.commit()
         conn.close()
         logging.info("deleteData successful")
+        res = False
+        return True
     except Exception as e:
         logging.info("deleteData:{}".format(e))
 
